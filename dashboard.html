@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" id="theme-link">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{{ url_for("static", filename="light.jpg") }}');
+            background-size: cover; /* Ensure the image fills the entire viewport */
+            background-position: center;
+            background-attachment: fixed; /* Keep the background consistent during scroll */
+            color: #333;
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 80%; /* Restored previous dimensions */
+            max-width: 600px; /* Limiting width for better layout */
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-button, .theme-toggle {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-button:hover, .theme-toggle:hover {
+            background-color: #45a049;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        nav li {
+            margin: 15px;
+            text-align: center;
+        }
+
+        nav img {
+            width: 60px;
+            height: 60px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 5px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div class="button-group">
+                <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+                <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li>
+                    <img src="{{ url_for('static', filename='workload_tracker.png') }}" alt="Workload Tracker">
+                    <a href="{{ url_for('workload_tracker') }}">Workload Tracker</a>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='resume.png') }}" alt="Resume Analyzer">
+                    <a href="{{ url_for('dashboard') }}">Resume Analyzer</a>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='accommodations.png') }}" alt="Accommodations">
+                    <a href="{{ url_for('home') }}">Accommodations</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <script>
+        function toggleTheme() {
+            const themeLink = document.getElementById('theme-link');
+            const bodyElement = document.body;
+            const lightImg = '{{ url_for("static", filename="light.jpg") }}';
+            const darkImg = '{{ url_for("static", filename="dark.jpg") }}';
+
+            if (themeLink.getAttribute('href') === '{{ url_for("static", filename="styles.css") }}') {
+                themeLink.setAttribute('href', '{{ url_for("static", filename="dark_mode.css") }}');
+                bodyElement.style.backgroundImage = `url(${lightImg})`;
+                bodyElement.style.color = "#f4f4f4";
+            } else {
+                themeLink.setAttribute('href', '{{ url_for("static", filename="styles.css") }}');
+                bodyElement.style.backgroundImage = `url(${darkImg})`;
+                bodyElement.style.color = "#333";
+            }
+        }
+    </script>
+</body>
+</html>

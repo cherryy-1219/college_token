@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 80%;
+            max-width: 600px;
+            text-align: left;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .sections, .suggestions {
+            margin-top: 20px;
+        }
+        .section {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resume Analyzer</h1>
+    <div class="container">
+        <form id="uploadForm" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pdf" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div id="full_text" class="sections"></div>
+        <div id="sections" class="sections"></div>
+        <div id="suggestions" class="sections"></div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch(event.target.action, {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await response.json();
+
+            // Display the full text
+            const fullTextDiv = document.getElementById('full_text');
+            fullTextDiv.innerHTML = '';
+            const fullTextTitle = document.createElement('h2');
+            fullTextTitle.textContent = 'Full Extracted Text';
+            fullTextDiv.appendChild(fullTextTitle);
+            const fullTextContent = document.createElement('pre');
+            fullTextContent.textContent = result.full_text;
+            fullTextDiv.appendChild(fullTextContent);
+
+            // Display the segregated sections
+            const sections = result.sections;
+            const sectionsDiv = document.getElementById('sections');
+            sectionsDiv.innerHTML = '';
+            for (const [section, text] of Object.entries(sections)) {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+                const sectionTitle = document.createElement('h2');
+                sectionTitle.textContent = section;
+                sectionDiv.appendChild(sectionTitle);
+                const sectionText = document.createElement('pre');
+                sectionText.textContent = text;
+                sectionDiv.appendChild(sectionText);
+                sectionsDiv.appendChild(sectionDiv);
+            }
+
+            // Display AI suggestions
+            const suggestionsDiv = document.getElementById('suggestions');
+            suggestionsDiv.innerHTML = '';
+            const suggestionsTitle = document.createElement('h2');
+            suggestionsTitle.textContent = 'Suggestions to Improve Your Resume';
+            suggestionsDiv.appendChild(suggestionsTitle);
+            const suggestionsContent = document.createElement('p');
+            suggestionsContent.textContent = result.suggestions;
+            suggestionsDiv.appendChild(suggestionsContent);
+        });
+    </script>
+</body>
+</html>

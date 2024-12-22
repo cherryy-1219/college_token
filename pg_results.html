@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PG Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>PG Accommodations in {{ location }}</h2>
+        <ul>
+            {% for pg in results %}
+                <li>
+                    <h3>{{ pg.name }}</h3>
+                    <p>Location: {{ pg.location }}</p>
+                    <p>Contact: {{ pg.contact }}</p>
+                    <p>Address: {{ pg.address }}</p>
+                    <p>Amenities: {{ pg.amenities }}</p>  <!-- No need for join filter -->
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

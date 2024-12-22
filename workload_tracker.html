@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workload Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" id="theme-link">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{{ url_for("static", filename="light.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: #baabab;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-group button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-group button:hover {
+            background-color: #45a049;
+        }
+
+        .task-list, .calendar-view {
+            margin-top: 20px;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .task input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .task-title {
+            flex-grow: 1;
+        }
+
+        .task-actions {
+            margin-left: 20px;
+        }
+
+        .countdown {
+            margin-left: 10px;
+            color: #ffcc00;
+        }
+
+        .add-task {
+            margin-top: 20px;
+        }
+
+        .add-task input, .add-task button {
+            margin: 5px 0;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .add-task button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .add-task button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Workload Tracker</h2>
+            <div class="button-group">
+                <button onclick="toggleView('list')">List View</button>
+                <button onclick="toggleView('calendar')">Calendar View</button>
+                <button onclick="toggleTheme()">Toggle Theme</button>
+            </div>
+        </div>
+        <div id="list-view" class="task-list">
+            <h3>Task List</h3>
+            <div id="tasks"></div>
+            <div class="add-task">
+                <input type="text" id="taskInput" placeholder="New Task">
+                <input type="date" id="dueDateInput">
+                <button onclick="addTask()">Add Task</button>
+            </div>
+        </div>
+        <div id="calendar-view" class="calendar-view" style="display: none;">
+            <h3>Calendar View</h3>
+            <p>Calendar integration goes here...</p>
+        </div>
+    </div>
+    <script>
+        function fetchTasks() {
+            fetch('/get_tasks')
+                .then(response => response.json())
+                .then(data => {
+                    renderTasks(data);
+                })
+                .catch(error => console.error('Error fetching tasks:', error));
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const dueDateInput = document.getElementById('dueDateInput');
+            const taskName = taskInput.value;
+            const dueDate = dueDateInput.value;
+
+            if (taskName && dueDate) {
+                const task = {
+                    name: taskName,
+                    dueDate: dueDate
+                };
+                fetch('/add_task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(task)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    taskInput.value = '';
+                    dueDateInput.value = '';
+                    fetchTasks();
+                })
+                .catch(error => console.error('Error adding task:', error));
+            } else {
+                alert('Please enter a task and a due date.');
+            }
+        }
+
+        function deleteTask(taskId) {
+            fetch(`/delete_task/${taskId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(() => fetchTasks())
+            .catch(error => console.error('Error deleting task:', error));
+        }
+
+        function renderTasks(tasks) {
+            const tasksContainer = document.getElementById('tasks');
+            tasksContainer.innerHTML = '';
+
+            tasks.forEach(task => {
+                const daysLeft = Math.ceil((new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
+                const taskElement = document.createElement('div');
+                taskElement.className = 'task';
+                taskElement.innerHTML = `
+                    <div class="task-title">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''}>
+                        <span>${task.name}</span>
+                        <span class="countdown">(${daysLeft} days left)</span>
+                    </div>
+                    <div class="task-actions">
+                        <button onclick="deleteTask('${task._id}')">Delete</button>
+                    </div>
+                `;
+                tasksContainer.appendChild(taskElement);
+            });
+        }
+
+        function toggleView(view) {
+            const listView = document.getElementById('list-view');
+            const calendarView = document.getElementById('calendar-view');
+            if (view === 'list') {
+                listView.style.display = 'block';
+                calendarView.style.display = 'none';
+            } else {
+                listView.style.display = 'none';
+                calendarView.style.display = 'block';
+            }
+        }
+
+        function toggleTheme() {
+            const themeLink = document.getElementById('theme-link');
+            if (themeLink.getAttribute('href') === '{{ url_for("static", filename="styles.css") }}') {
+                themeLink.setAttribute('href', '{{ url_for("static", filename="dark_mode.css") }}');
+            } else {
+                themeLink.setAttribute('href', '{{ url_for("static", filename="styles.css") }}');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchTasks);
+    </script>
+</body>
+</html>
