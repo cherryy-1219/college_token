@@ -80,7 +80,7 @@ def get_ai_suggestions(text):
         outputs = gpt2_model.generate(
             inputs,
             attention_mask=attention_mask,
-            max_length=200,
+            max_length=600,
             num_return_sequences=1,
             pad_token_id=gpt2_tokenizer.eos_token_id  # Set pad token ID to eos token ID
         )

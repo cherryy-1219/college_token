@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('C:/Users/HP/Desktop/coderit/static/light.jpg'); /* Full path to light background */
+    background-size: cover;  /* Ensures the image covers the full screen */
+    background-position: center;  /* Centers the background image */
+    background-repeat: no-repeat;  /* Prevents the background from repeating */
+    margin: 0;
+    color: #333;
+    background-color: #fff;
+}
+
+.container {
+    width: 80%;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.8); /* Light background to improve text visibility */
+    border-radius: 10px; /* Adds rounded corners to the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow around the container */
+}
+
+h2 {
+    text-align: center;
+}
+
+input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+p {
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+    form div {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+    label {
+        margin-bottom: 5px;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    button {
+        width: 100%;
+    }
+}

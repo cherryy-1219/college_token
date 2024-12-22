@@ -5,8 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search PG</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .theme-toggle {
+               position: absolute;
+               top: 20px;
+               right: 20px;
+               cursor: pointer;
+               padding: 10px 10px; /* Increased height by adjusting top and bottom padding */
+               width: 70px; /* Set a fixed width for the button */
+               background-color: #333;
+               color: #fff;
+               border: none;
+               border-radius: 5px;
+               font-size: 14px; /* Adjust as needed */
+               text-align: center; /* Center the text */
+           }
+           /* Other styles remain unchanged */
+               body {
+                   font-family: Arial, sans-serif;
+                   background-size: cover;
+                   background-position: center;
+                   background-repeat: no-repeat;
+                   margin: 0;
+                   color: #433b3b;
+                   background-color: #333;
+                   transition: background-image 0.3s ease;
+               }
+               .container {
+                   width: 80%;
+                   max-width: 400px;
+                   margin: 100px auto;
+                   padding: 40px;
+                   background-color: rgba(214, 196, 196, 0.9);
+                   border-radius: 10px;
+                   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+               }
+               h2 {
+                   text-align: center;
+               }
+               input[type="email"], input[type="password"] {
+                   width: 100%;
+                   padding: 10px;
+                   margin: 10px 0;
+                   border: 1px solid #ccc;
+                   border-radius: 5px;
+               }
+               button {
+                   width: 100%;
+                   padding: 10px;
+                   background-color: #4CAF50;
+                   color: white;
+                   border: none;
+                   border-radius: 5px;
+                   cursor: pointer;
+               }
+               button:hover {
+                   background-color: #45a049;
+               }
+               p {
+                   text-align: center;
+               }
+               @media only screen and (max-width: 600px) {
+                   .container {
+                       width: 100%;
+                       padding: 10px;
+                   }
+                   form div {
+                       display: flex;
+                       flex-direction: column;
+                       margin-bottom: 15px;
+                   }
+                   label {
+                       margin-bottom: 5px;
+                   }
+                   input {
+                       width: 100%;
+                       padding: 8px;
+                       box-sizing: border-box;
+                   }
+                   button {
+                       width: 100%;
+                   }
+               }
+           </style>
 </head>
-<body>
+<body style="background-image: url('{{ url_for('static', filename='light.jpg') }}');">
     <div class="container">
         <h2>Find PG Accommodation</h2>
         <form action="{{ url_for('search_pg') }}" method="post">

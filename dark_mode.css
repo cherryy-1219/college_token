@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('C:/Users/HP/Desktop/coderit/static/dark.jpg'); /* Full path to dark background */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    color: #f4f4f4;
+    background-color: #111; /* Darker background color */
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.8); /* Dark background for container */
+    color: #ddd; /* Light text color */
+}
+
+button {
+    background-color: #555;
+    color: #f4f4f4;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+.theme-toggle {
+    background-color: #555;
+    color: #f4f4f4;
+}
+
+.theme-toggle:hover {
+    background-color: #444;
+}
+
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+    form div {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+    label {
+        margin-bottom: 5px;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    button {
+        width: 100%;
+    }
+}
